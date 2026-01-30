@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Technology Updates Hub</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Verdana, sans-serif;
+    background:#eef2f7;
+}
+
+header{
+    background:linear-gradient(90deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+    padding:20px;
+    text-align:center;
+}
+
+.search-area{
+    display:flex;
+    justify-content:center;
+    margin:20px;
+}
+
+.search-area input{
+    padding:12px;
+    width:50%;
+    border-radius:25px;
+    border:1px solid #ccc;
+    font-size:15px;
+    outline:none;
+}
+
+.news-wrapper{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    padding:20px;
+}
+
+.card{
+    background:#ffffff;
+    border-radius:12px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.08);
+    overflow:hidden;
+    transition:transform 0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:15px;
+}
+
+.card-body h3{
+    margin-top:0;
+    color:#2c3e50;
+}
+
+.card-body p{
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+}
+
+.card-body button{
+    margin-top:12px;
+    padding:9px 14px;
+    background:#2c5364;
+    color:white;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+}
+
+.modal-box{
+    background:#fff;
+    width:75%;
+    margin:40px auto;
+    padding:25px;
+    border-radius:12px;
+    max-height:85%;
+    overflow:auto;
+}
+
+.modal-box img{
+    width:65%;
+    display:block;
+    margin:15px auto;
+    border-radius:10px;
+}
+
+.close-btn{
+    float:right;
+    font-size:20px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Technology Updates Hub</h1>
+    <p>Latest trends simplified for learners</p>
+</header>
+
+<div class="search-area">
+    <input type="text" id="searchBox" placeholder="Type AI, Cloud, Security...">
+</div>
+
+<div class="news-wrapper" id="newsWrapper"></div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <span class="close-btn" onclick="closeModal()">✕</span>
+        <h2 id="modalTitle"></h2>
+        <img id="modalImg">
+        <div id="modalText"></div>
+    </div>
+</div>
+
+<script>
+
+const newsList = [
+{
+id:101,
+title:"Software Industry Powered by AI",
+desc:"Artificial Intelligence is changing how software is built.",
+img:"https://images.unsplash.com/photo-1677442136019-21780ecad995",
+tag:"AI",
+content:`
+<p>Artificial Intelligence plays a major role in modern software development today.</p>
+<p>Developers rely on AI tools to write, test and optimize code faster.</p>
+<p>AI-based systems help detect bugs early and improve overall accuracy.</p>
+<p>From chatbots to recommendation engines, AI improves user experience.</p>
+<p>Due to its efficiency, AI skills are now in very high demand.</p>
+`
+},
+{
+id:102,
+title:"Cloud Technology and Its Impact",
+desc:"Cloud computing makes systems scalable and flexible.",
+img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
+tag:"Cloud",
+content:`
+<p>Cloud computing allows users to store and manage data online.</p>
+<p>Organizations reduce infrastructure cost using cloud platforms.</p>
+<p>Services like AWS and Azure offer high availability and security.</p>
+<p>Cloud supports DevOps, big data and AI-based applications.</p>
+<p>Learning cloud technology opens many career opportunities.</p>
+`
+},
+{
+id:103,
+title:"Rising Need for Cybersecurity",
+desc:"Digital growth increases security challenges.",
+img:"https://images.unsplash.com/photo-1614064641938-3bbee52942c7",
+tag:"Security",
+content:`
+<p>As digital systems grow, cybersecurity becomes more important.</p>
+<p>Threats such as phishing and ransomware are increasing rapidly.</p>
+<p>Organizations use firewalls, encryption and MFA for protection.</p>
+<p>Cybersecurity professionals play a critical role in safety.</p>
+<p>This domain offers strong career growth worldwide.</p>
+`
+},
+{
+id:104,
+title:"Efficient Data Management",
+desc:"Handling data properly improves system performance.",
+img:"https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+tag:"Data",
+content:`
+<p>Data handling focuses on collecting, processing and storing information.</p>
+<p>Proper validation ensures accuracy and reduces errors.</p>
+<p>Secure storage and backups protect valuable data.</p>
+<p>Good data practices support analytics and decision-making.</p>
+<p>It is a core skill in software and analytics fields.</p>
+`
+}
+];
+
+
+const wrapper = document.getElementById("newsWrapper");
+
+function loadNews(list){
+    wrapper.innerHTML="";
+    list.forEach(item=>{
+        wrapper.innerHTML += `
+        <div class="card">
+            <img src="${item.img}">
+            <div class="card-body">
+                <h3>${item.title}</h3>
+                <p>${item.desc}</p>
+                <button onclick="openModal(${item.id})">View Details</button>
+            </div>
+        </div>`;
+    });
+}
+
+loadNews(newsList);
+
+function openModal(id){
+    const data = newsList.find(n=>n.id===id);
+    modal.style.display="block";
+    modalTitle.innerText=data.title;
+    modalImg.src=data.img;
+    modalText.innerHTML=data.content;
+}
+
+function closeModal(){
+    modal.style.display="none";
+}
+
+document.getElementById("searchBox").addEventListener("input",function(){
+    const key=this.value.toLowerCase();
+    const result=newsList.filter(n=>
+        n.title.toLowerCase().includes(key) ||
+        n.tag.toLowerCase().includes(key)
+    );
+    loadNews(result);
+});
+</script>
+
+</body>
+</html>
